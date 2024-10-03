@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .requestMatchers("/cabinet/verification").permitAll()
                 .requestMatchers("/cabinet/login").permitAll()
                 .requestMatchers("/cabinet/me").authenticated()
+                .requestMatchers("/reg").permitAll()
                 .anyRequest().authenticated()
         );
 

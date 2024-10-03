@@ -28,8 +28,14 @@ public class RegistrationEntity {
     @Column(name = "role")
     public EnumRoles role;
 
-    @Column(name = "fio")
-    public String fio;
+    @Column(name = "name")
+    public String name;
+
+    @Column(name = "surname")
+    public String surname;
+
+    @Column(name = "nickname")
+    public String nickname;
 
     @Column(name = "birth_day")
     public LocalDate birthDay;
@@ -44,17 +50,30 @@ public class RegistrationEntity {
     private LocalDateTime dtUpdate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private EnumStatusRegistration status;
 
     public RegistrationEntity() {
     }
 
-    public RegistrationEntity(UUID uuid, String email, String password, EnumRoles role, String fio, LocalDate birthDay, LocalDateTime dtCreate, LocalDateTime dtUpdate, EnumStatusRegistration status) {
+    public RegistrationEntity(UUID uuid,
+                              String email,
+                              String password,
+                              EnumRoles role,
+                              String name,
+                              String surname,
+                              String nickname,
+                              LocalDate birthDay,
+                              LocalDateTime dtCreate,
+                              LocalDateTime dtUpdate,
+                              EnumStatusRegistration status) {
         this.uuid = uuid;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.fio = fio;
+        this.name = name;
+        this.surname = surname;
+        this.nickname = nickname;
         this.birthDay = birthDay;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -93,12 +112,28 @@ public class RegistrationEntity {
         this.role = role;
     }
 
-    public String getFio() {
-        return fio;
+    public String getName() {
+        return name;
     }
 
-    public void setFio(String fio) {
-        this.fio = fio;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public LocalDate getBirthDay() {

@@ -6,3 +6,11 @@ spring:
     url: jdbc:postgresql://127.0.0.1:15432/dboasis
     username: system_app
     password: 855312
+
+email:
+  recipient: ${MAIL_APP}
+  password: ${MAIL_PASSWORD_APP}
+
+app:
+  jwt:
+    secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw

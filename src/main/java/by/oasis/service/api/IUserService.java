@@ -8,4 +8,6 @@ public interface IUserService {
 
     RegistrationEntity findByEmail(String username);
 
+    void save(RegistrationEntity registrationEntity);
+
 }

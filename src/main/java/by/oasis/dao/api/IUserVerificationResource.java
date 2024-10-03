@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface IUserVerificationResource extends JpaRepository<VerificationEntity, UUID> {
 
+    VerificationEntity findByEmail(String email);
 }

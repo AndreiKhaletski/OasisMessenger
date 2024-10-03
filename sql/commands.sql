@@ -23,11 +23,13 @@ CREATE TABLE IF NOT EXISTS app.users (
     email VARCHAR(255),
     password VARCHAR(255),
     role VARCHAR(255),
-    fio VARCHAR(255),
-    birth_day TIMESTAMP TIME ZONE NOT NULL,
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    nickname VARCHAR(255),
+    birth_day TIMESTAMP WITH TIME ZONE NOT NULL,
     dt_create TIMESTAMP WITH TIME ZONE,
     dt_update TIMESTAMP WITH TIME ZONE,
-    status VARCHAR(255),
+    status VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS app.verification (
@@ -41,10 +43,12 @@ ALTER TABLE app.verification
 
 INSERT INTO app.users (
     uuid,
-    mail,
+    email,
     password,
     role,
-    fio,
+    name,
+    surname,
+    nickname,
     birth_day,
     dt_create,
     dt_update,
@@ -55,7 +59,9 @@ VALUES (
     'admin@gmail.com',
     '$2a$10$kVx33idOsssroHLhLR7Bgu1WkJQ.N3Cy0Ma3u6Lcy.8GPuxwnbxmq',
     'ROLE_ADMIN',
-    'Admin Adminovich',
+    'Admin',
+    'Administrator',
+    'Adminovich',
     '1995-08-21',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
