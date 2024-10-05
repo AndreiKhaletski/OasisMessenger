@@ -41,7 +41,12 @@ public class SecurityConfig {
                 .requestMatchers("/cabinet/verification").permitAll()
                 .requestMatchers("/cabinet/login").permitAll()
                 .requestMatchers("/cabinet/me").authenticated()
-                .requestMatchers("/reg").permitAll()
+                .requestMatchers("/main/**").permitAll()
+                .requestMatchers("/").permitAll()
+//                .requestMatchers("/static/images/**").permitAll()
+//                .requestMatchers("/static/images/awdawdad2d2.png").permitAll()
+//                .requestMatchers("static/images/awdawdad2d2.png").permitAll()
+//                .requestMatchers("http://127.0.0.1:8080/static/images/awdawdad2d2.png").permitAll()
                 .anyRequest().authenticated()
         );
 

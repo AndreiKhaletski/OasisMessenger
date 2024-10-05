@@ -44,10 +44,10 @@ public class CabinetService implements ICabinetService {
 
     @Override
     @Transactional
-    public void verification(String code, String mail) {
-        RegistrationEntity registrationEntity = userService.findByEmail(mail);
+    public void verification(String code, String email) {
+        RegistrationEntity registrationEntity = userService.findByEmail(email);
 
-        if(Objects.equals(code, verificationService.get(mail))){
+        if(Objects.equals(code, verificationService.get(email))){
             registrationEntity.setStatus(EnumStatusRegistration.ACTIVATED);
             userService.save(registrationEntity);
         }else {

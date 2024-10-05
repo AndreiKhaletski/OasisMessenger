@@ -28,14 +28,12 @@ public class CabinetController {
     @PostMapping(value = "/registration")
     public ResponseEntity<?> create(@RequestBody RegistrationDto registrationDto){
         cabinetService.create(registrationDto);
-//        URI verificationUri = URI.create("/ver");
-//        return ResponseEntity.status(HttpStatus.FOUND).location(verificationUri).build();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(value = "/verification")
-    public ResponseEntity<?> get(@RequestParam("code") String code,
-                                 @RequestParam("mail") String email){
+    public ResponseEntity<?> get(@RequestParam("email") String email,
+                                 @RequestParam("code") String code){
         cabinetService.verification(code, email);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -43,7 +41,6 @@ public class CabinetController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> authorization(@RequestBody AuthorizationDto authorizationDto){
         String authorization = cabinetService.authorization(authorizationDto);
-
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, authorization).build();
     }
 

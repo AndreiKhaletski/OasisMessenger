@@ -5,11 +5,27 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        @keyframes bounceIn {
+            0% {
+                transform: translateY(-1000px);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(30px);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 80vh;
             margin: 0;
             font-family: 'Caladea', sans-serif;
             background-color: #f0f0f0;
@@ -48,8 +64,8 @@
         input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
             font-size: 15px;
             transition: border-color 0.3s;
 
@@ -62,6 +78,7 @@
             width: 200px;
             height: auto;
             margin-bottom: 20px;
+            animation: bounceIn 1s ease;
         }
         h1 {
             margin-top: -18px;
@@ -80,7 +97,7 @@
             border-radius: 20px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.1s;
             margin-top: 20px;
             width: 100%;
             height: 50px;
@@ -90,12 +107,16 @@
         button:hover {
             background-color: #6A5ACD;
         }
+        button:active {
+            transform: scale(0.95);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 1.2);
+        }
     </style>
 </head>
 <body>
 <div id="dynamicText">
-    <img src="images/logoOasis.png" alt="Logo Oasis" class="logo">
-    <form id="registrationForm">
+    <img src="static/images/awdawdad2d2.png" alt="Logo Oasis" class="logo">
+    <form id="verificationForm">
         <h1>Oasis</h1>
         <div>
             <label for="email">Your email</label>
@@ -112,28 +133,26 @@
 
 <script>
     $(document).ready(function() {
-        $('#registrationForm').submit(function(event) {
-            event.preventDefault();
+    $('#verificationForm').submit(function(event) {
+        event.preventDefault();
 
-            var formData = {
-                email: $('#email').val(),
-                code: $('#code').val()
-            };
+        var email = $('#email').val();
+        var code = $('#code').val();
+        var queryParams = 'email=' + encodeURIComponent(email) + '&code=' + encodeURIComponent(code);
 
-            $.ajax({
-                type: 'POST',
-                url: '/cabinet/verification',
-                data: JSON.stringify(formData),
-                contentType: 'application/json; charset=UTF-8',
-                success: function(response) {
-                    alert('Registration successful!');
-                },
-                error: function(xhr, status, error) {
-                    alert('Error during registration: ' + error);
-                }
-            });
+        $.ajax({
+            type: 'GET',
+            url: '/cabinet/verification?' + queryParams,
+            success: function(response) {
+                alert('Верификация прошла успешно!');
+                window.location.href = 'http://localhost:8080/main/log';
+            },
+            error: function(xhr, status, error) {
+                alert('Ошибка верификации: ' + xhr.responseText);
+            }
         });
     });
+});
 </script>
 </body>
 </html>

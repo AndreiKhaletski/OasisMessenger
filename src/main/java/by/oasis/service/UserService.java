@@ -56,7 +56,8 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void save(RegistrationEntity registrationEntity) {
-        userResource.saveAndFlush(registrationEntity);
+        userResource.save(registrationEntity);
     }
 }

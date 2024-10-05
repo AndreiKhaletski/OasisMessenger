@@ -21,12 +21,11 @@
                 transform: translateY(0);
             }
         }
-
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 90vh;
             margin: 0;
             font-family: 'Caladea', sans-serif;
             background-color: #f0f0f0;
@@ -37,24 +36,21 @@
         }
         form {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
             background: #fff;
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 460px;
-            height: 330px;
-            margin-left: 20px;
-            margin-right: 20px;
+            width: 250px;
+            margin: 20px;
         }
-
         form div {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             margin-bottom: 10px;
-            width: 45%;
+            width: 100%;
         }
         label {
             align-self: flex-start;
@@ -63,7 +59,7 @@
             color: #333;
         }
         input {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             border: 2px solid #ccc;
             border-radius: 8px;
@@ -88,7 +84,6 @@
             width: 100%;
             text-align: center;
         }
-
         button {
             padding: 10px 20px;
             background-color: #7B68EE;
@@ -100,8 +95,7 @@
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.1s;
             margin-top: 20px;
             width: 100%;
-            margin-right: 0px;
-            margin-left: 20px;
+            height: 40px;
         }
         button:hover {
             background-color: #6A5ACD;
@@ -125,23 +119,7 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-            <label for="surname">Surname</label>
-            <input type="text" id="surname" name="surname" required>
-        </div>
-        <div>
-            <label for="nickname">Nickname</label>
-            <input type="text" id="nickname" name="nickname" required>
-        </div>
-        <div>
-            <label for="birth_day">Birth Date</label>
-            <input type="date" id="birth_day" name="birth_day" required>
-        </div>
-        <button type="submit">Registration</button>
+        <button type="submit">Log in</button>
     </form>
 </div>
 
@@ -153,24 +131,19 @@
 
             var formData = {
                 email: $('#email').val(),
-                password: $('#password').val(),
-                name: $('#name').val(),
-                surname: $('#surname').val(),
-                nickname: $('#nickname').val(),
-                birth_day: $('#birth_day').val()
+                code: $('#password').val()
             };
 
             $.ajax({
                 type: 'POST',
-                url: '/cabinet/registration',
+                url: '/cabinet/login',
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=UTF-8',
                 success: function(response) {
-                    alert('Регистрация прошла успешна!');
-                    window.location.href = 'http://localhost:8080/main/ver';
+                    alert('Вход выполнен');
                 },
                 error: function(xhr, status, error) {
-                    alert('Ошибка при регистрации: ' + error);
+                    alert('Ошибка входа: ' + error);
                 }
             });
         });

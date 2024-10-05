@@ -6,13 +6,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
-    @GetMapping("/reg")
+    @GetMapping("/")
+    public String mainPage(){
+        return "mainPage";
+    }
+
+    @GetMapping("/main/reg")
     public String registration(){
         return "registration";
     }
 
-    @GetMapping("/ver")
+    @GetMapping("/main/ver")
     public String verification(){
         return "verification";
+    }
+
+    @GetMapping("/main/log")
+    public String login(){
+        return "login";
     }
 }
