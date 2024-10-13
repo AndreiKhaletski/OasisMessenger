@@ -25,7 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 90vh;
             margin: 0;
             font-family: 'Caladea', sans-serif;
             background-color: #f0f0f0;
@@ -36,24 +36,21 @@
         }
         form {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
             background: #fff;
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 460px;
-            height: 200px;
-            margin-left: 20px;
-            margin-right: 20px;
+            width: 250px;
+            margin: 20px;
         }
-
         form div {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             margin-bottom: 10px;
-            width: 45%;
+            width: 100%;
         }
         label {
             align-self: flex-start;
@@ -62,13 +59,12 @@
             color: #333;
         }
         input {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             border: 2px solid #ccc;
             border-radius: 8px;
             font-size: 15px;
             transition: border-color 0.3s;
-
         }
         input:focus {
             border-color: #7B68EE;
@@ -88,7 +84,6 @@
             width: 100%;
             text-align: center;
         }
-
         button {
             padding: 10px 20px;
             background-color: #7B68EE;
@@ -100,9 +95,7 @@
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.1s;
             margin-top: 20px;
             width: 100%;
-            height: 50px;
-            margin-right: 60x;
-            margin-left: 15px;
+            height: 40px;
         }
         button:hover {
             background-color: #6A5ACD;
@@ -114,45 +107,15 @@
     </style>
 </head>
 <body>
-<div id="dynamicText">
-    <img src="http://localhost:8080/image" alt="Logo Oasis" class="logo">
-    <form id="verificationForm">
-        <h1>Oasis</h1>
-        <div>
-            <label for="email">Your email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="code">Your code</label>
-            <input type="code" id="code" name="code" required>
-        </div>
-        <button type="submit">Activate</button>
-    </form>
-</div>
+<h1>Кабинет</h1>
 
+<button onclick="logout()">Выйти</button>
 
 <script>
-    $(document).ready(function() {
-    $('#verificationForm').submit(function(event) {
-        event.preventDefault();
-
-        var email = $('#email').val();
-        var code = $('#code').val();
-        var queryParams = 'email=' + encodeURIComponent(email) + '&code=' + encodeURIComponent(code);
-
-        $.ajax({
-            type: 'GET',
-            url: '/cabinet/verification?' + queryParams,
-            success: function(response) {
-                alert('Верификация прошла успешно!');
-                window.location.href = 'http://localhost:8080/main/log';
-            },
-            error: function(xhr, status, error) {
-                alert('Ошибка верификации: ' + xhr.responseText);
-            }
-        });
-    });
-});
+    function logout() {
+        sessionStorage.removeItem('token');
+        window.location.href = '/main/log';
+    }
 </script>
 </body>
 </html>

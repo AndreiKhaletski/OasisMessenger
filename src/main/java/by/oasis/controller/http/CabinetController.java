@@ -4,13 +4,16 @@ import by.oasis.core.dto.AuthorizationDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.service.api.ICabinetService;
 import by.oasis.service.converter.RegistrationConverter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/cabinet")
 public class CabinetController {
@@ -55,4 +58,16 @@ public class CabinetController {
         RegistrationDto registrationDto = converter.convertToRegDto(cabinetService.getInfoMe());
         return ResponseEntity.status(HttpStatus.CREATED).body(registrationDto);
     }
+
+//    @GetMapping(value = "/validateToken")
+//    public ResponseEntity userValidation(HttpServletRequest request){
+//
+//        String token = request.getHeader("Authorization");
+//        boolean isValid = cabinetService.getValidToken(token);
+//        if (isValid) {
+//            return ResponseEntity.ok().build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
 }

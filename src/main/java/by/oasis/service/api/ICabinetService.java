@@ -3,6 +3,7 @@ package by.oasis.service.api;
 import by.oasis.core.dto.AuthorizationDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.dao.entity.RegistrationEntity;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface ICabinetService {
     void create(RegistrationDto registrationDto);
@@ -13,4 +14,5 @@ public interface ICabinetService {
 
     RegistrationEntity getInfoMe();
 
+//    boolean getValidToken(String token);
 }

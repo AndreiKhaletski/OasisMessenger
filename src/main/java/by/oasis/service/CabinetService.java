@@ -9,6 +9,8 @@ import by.oasis.service.api.ICabinetService;
 import by.oasis.service.api.IUserService;
 import by.oasis.service.api.IVerificationService;
 import by.oasis.service.jwt.JwtTokenHandler;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,4 +80,9 @@ public class CabinetService implements ICabinetService {
     public RegistrationEntity getInfoMe() {
         return userService.findByEmail(UserHolder.getUser().getUsername());
     }
+
+//    @Override
+//    public boolean getValidToken(String token) {
+//        return jwtTokenHandler.validate(token);
+//    }
 }

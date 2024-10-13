@@ -62,16 +62,17 @@
             z-index: 1;
         }
         h1 {
-            font-size: 80px;
-            font-family: 'Pristina', sans-serif;
-            color: #333;
-            text-align: center;
-            display: none;
-            z-index: 0;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-260%);
-        }
+    font-size: 80px;
+    font-family: 'Pristina', sans-serif;
+    color: #333;
+    text-align: center;
+    display: none;
+    z-index: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-260%);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
         button {
             padding: 10px 20px;
             background-color: #7B68EE;
@@ -86,21 +87,25 @@
             height: 40px;
             position: relative;
             z-index: 2;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
+
         button:hover {
             background-color: #6A5ACD;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.3);
         }
+
         button:active {
             transform: scale(0.95);
-            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 1.2);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body>
 <div id="dynamicText">
-    <img src="static/images/awdawdad2d2.png" alt="Logo Oasis" class="logo" id="logo">
+    <img src="http://localhost:8080/image" alt="Logo Oasis" class="logo" id="logo">
     <button onclick="window.location.href='http://localhost:8080/main/log'">Log in</button>
-    <button onclick="window.location.href='http://localhost:8080/main/reg'">Registration</button>
+    <button onclick="window.location.href='http://localhost:8080/main/reg'">Sign up</button>
     <h1 id="oasisText">Oasis</h1>
 </div>
 <script>

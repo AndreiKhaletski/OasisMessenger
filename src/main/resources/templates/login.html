@@ -104,12 +104,67 @@
             transform: scale(0.95);
             box-shadow: inset 0 3px 5px rgba(0, 0, 0, 1.2);
         }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 25px;
+            right: -160px;
+            bottom: -24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            Right: 29.6px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .rememberMeLabel {
+            position: relative;
+            right: -30px;
+            top: 49px;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Caladea', sans-serif;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
 <div id="dynamicText">
-    <img src="static/images/awdawdad2d2.png" alt="Logo Oasis" class="logo">
-    <form id="registrationForm">
+    <img src="http://localhost:8080/image" alt="Logo Oasis" class="logo">
+    <form id="loginForm">
         <h1>Oasis</h1>
         <div>
             <label for="email">Email</label>
@@ -119,35 +174,72 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </div>
+        <div>
+            <label for="rememberMe" class="rememberMeLabel">Remember me</label>
+            <label class="switch">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <span class="slider"></span>
+            </label>
+        </div>
         <button type="submit">Log in</button>
     </form>
 </div>
 
-
 <script>
-    $(document).ready(function() {
-        $('#registrationForm').submit(function(event) {
-            event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-            var formData = {
-                email: $('#email').val(),
-                code: $('#password').val()
-            };
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            $.ajax({
-                type: 'POST',
-                url: '/cabinet/login',
-                data: JSON.stringify(formData),
-                contentType: 'application/json; charset=UTF-8',
-                success: function(response) {
-                    alert('Вход выполнен');
+        try {
+            const response = await fetch('http://localhost:8080/cabinet/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                error: function(xhr, status, error) {
-                    alert('Ошибка входа: ' + error);
-                }
+                body: JSON.stringify({ email, password })
             });
-        });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                const jwtToken = response.headers.get('Authorization');
+
+                if (jwtToken) {
+                    const tokenWithBearer = `Bearer ${jwtToken}`;
+
+                    if (document.getElementById('rememberMe').checked) {
+                        localStorage.setItem('Authorization', tokenWithBearer);
+                    } else {
+                        sessionStorage.setItem('Authorization', tokenWithBearer);
+                    }
+
+                    // Перенаправление через fetch с заголовками
+                    const redirectResponse = await fetch(responseData.redirectUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': tokenWithBearer
+                        }
+                    });
+
+                    if (redirectResponse.ok) {
+                        window.location.href = responseData.redirectUrl;
+                    } else {
+                        console.error('Ошибка: не удалось выполнить запрос на перенаправление');
+                    }
+                } else {
+                    alert('Токен не найден в заголовке ответа');
+                }
+            } else {
+                console.error('Ошибка входа');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     });
+});
+
 </script>
 </body>
 </html>
