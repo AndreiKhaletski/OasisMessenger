@@ -41,6 +41,14 @@ public class CabinetController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+//    @PostMapping(value = "/login")
+//    public ResponseEntity<?> authorization(@RequestBody AuthorizationDto authorizationDto) {
+//        String token = "Bearer " + cabinetService.authorization(authorizationDto);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", token);
+//        return ResponseEntity.ok().headers(headers).build();
+//    }
+
     @PostMapping(value = "/login")
     public ResponseEntity<?> authorization(@RequestBody AuthorizationDto authorizationDto){
         String authorization = cabinetService.authorization(authorizationDto);
