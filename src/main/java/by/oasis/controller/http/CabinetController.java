@@ -56,9 +56,10 @@ public class CabinetController {
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> exit(){
-
-        return null;
+    public ResponseEntity<?> exit(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        cabinetService.blackListToken(token);
+        return ResponseEntity.ok().body("Вы успешно вышли из аккаунта!");
     }
 
     @GetMapping(value = "/me")

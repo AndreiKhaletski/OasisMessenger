@@ -1,6 +1,7 @@
 package by.oasis.service;
 
 import by.oasis.core.dto.AuthorizationDto;
+import by.oasis.core.dto.BlackListTokenDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.core.enums.EnumRoles;
 import by.oasis.core.enums.EnumStatusRegistration;
@@ -15,7 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -70,6 +74,9 @@ public class CabinetService implements ICabinetService {
             String token = jwtTokenHandler.generateAccessToken(
                     authorizationDto.getEmail(),
                     String.valueOf(registrationEntity.getRole()));
+            registrationEntity.setToken(token);
+            registrationEntity.setDtUpdate(LocalDateTime.now(ZoneOffset.UTC));
+            userService.save(registrationEntity);
             return token;
         }else{
             throw new IllegalArgumentException("Необходимо подтвердить аккаунт для входа в систему!");
@@ -79,6 +86,12 @@ public class CabinetService implements ICabinetService {
     @Override
     public RegistrationEntity getInfoMe() {
         return userService.findByEmail(UserHolder.getUser().getUsername());
+    }
+
+    @Override
+    @Transactional
+    public void blackListToken(String token) {
+        userService.addTokenToLock(token);
     }
 
 //    @Override

@@ -29,13 +29,20 @@ CREATE TABLE IF NOT EXISTS app.users (
     birth_day TIMESTAMP WITH TIME ZONE NOT NULL,
     dt_create TIMESTAMP WITH TIME ZONE,
     dt_update TIMESTAMP WITH TIME ZONE,
-    status VARCHAR(255)
+    status VARCHAR(255),
+    token VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS app.verification (
     email VARCHAR(255) PRIMARY KEY,
     code VARCHAR(255),
     status VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS app.black_list_tokens (
+    uuid UUID PRIMARY KEY,
+    token VARCHAR(255),
+    blocktime_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE app.verification

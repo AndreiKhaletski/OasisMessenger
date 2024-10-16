@@ -44,7 +44,7 @@ public class RegistrationEntity {
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
 
-    @Version
+//    @Version
     @UpdateTimestamp
     @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
@@ -52,6 +52,9 @@ public class RegistrationEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private EnumStatusRegistration status;
+
+    @Column(name = "jwt_token")
+    private String token;
 
     public RegistrationEntity() {
     }
@@ -66,7 +69,8 @@ public class RegistrationEntity {
                               LocalDate birthDay,
                               LocalDateTime dtCreate,
                               LocalDateTime dtUpdate,
-                              EnumStatusRegistration status) {
+                              EnumStatusRegistration status,
+                              String token) {
         this.uuid = uuid;
         this.email = email;
         this.password = password;
@@ -78,6 +82,7 @@ public class RegistrationEntity {
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.status = status;
+        this.token = token;
     }
 
     public UUID getUuid() {
@@ -166,5 +171,13 @@ public class RegistrationEntity {
 
     public void setStatus(EnumStatusRegistration status) {
         this.status = status;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

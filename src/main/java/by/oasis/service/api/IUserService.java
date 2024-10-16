@@ -1,5 +1,6 @@
 package by.oasis.service.api;
 
+import by.oasis.core.dto.BlackListTokenDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.dao.entity.RegistrationEntity;
 
@@ -10,4 +11,5 @@ public interface IUserService {
 
     void save(RegistrationEntity registrationEntity);
 
+    void addTokenToLock(String token);
 }

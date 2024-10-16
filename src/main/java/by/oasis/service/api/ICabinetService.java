@@ -14,5 +14,7 @@ public interface ICabinetService {
 
     RegistrationEntity getInfoMe();
 
+    void blackListToken(String token);
+
 //    boolean getValidToken(String token);
 }

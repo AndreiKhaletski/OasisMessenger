@@ -20,6 +20,7 @@ public class RegistrationConverter {
         registrationDto.setBirth_day(item.getBirthDay());
         registrationDto.setDt_create(item.getDtCreate());
         registrationDto.setDt_update(item.getDtUpdate());
+        registrationDto.setToken(item.getToken());
         return registrationDto;
     }
 
@@ -35,6 +36,7 @@ public class RegistrationConverter {
         registrationEntity.setBirthDay(item.getBirth_day());
         registrationEntity.setDtCreate(item.getDt_create());
         registrationEntity.setDtUpdate(item.getDt_update());
+        registrationEntity.setToken(item.getToken());
         return registrationEntity;
     }
 

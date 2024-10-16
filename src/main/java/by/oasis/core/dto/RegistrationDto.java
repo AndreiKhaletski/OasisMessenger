@@ -26,4 +26,5 @@ public class RegistrationDto {
     public LocalDate birth_day;
     private LocalDateTime dt_create;
     private LocalDateTime dt_update;
+    private String token;
 }
