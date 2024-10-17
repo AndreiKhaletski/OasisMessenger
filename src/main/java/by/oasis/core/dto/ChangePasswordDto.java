@@ -7,8 +7,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ChangePassword {
+public class ChangePasswordDto {
     public String currentPassword;
     public String newPassword;
-    public String 
+    public String confirmNewPassword;
 }

@@ -1,7 +1,7 @@
 package by.oasis.service;
 
 import by.oasis.core.dto.AuthorizationDto;
-import by.oasis.core.dto.BlackListTokenDto;
+import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.core.enums.EnumRoles;
 import by.oasis.core.enums.EnumStatusRegistration;
@@ -10,8 +10,6 @@ import by.oasis.service.api.ICabinetService;
 import by.oasis.service.api.IUserService;
 import by.oasis.service.api.IVerificationService;
 import by.oasis.service.jwt.JwtTokenHandler;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -94,8 +91,25 @@ public class CabinetService implements ICabinetService {
         userService.addTokenToLock(token);
     }
 
-//    @Override
-//    public boolean getValidToken(String token) {
-//        return jwtTokenHandler.validate(token);
-//    }
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordDto changePasswordDto) {
+        RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
+        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
+
+        if (blackToken){
+            throw new IllegalArgumentException("Ваш токен аннулирован!");
+        }
+
+        if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), registrationEntity.getPassword())){
+            throw new IllegalArgumentException("Текущий пароль не совпадает с паролем вашего аккаунта!");
+        }
+
+        if (Objects.equals(changePasswordDto.getNewPassword(), changePasswordDto.getConfirmNewPassword())){
+            registrationEntity.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+            userService.setNewPassword(registrationEntity);
+        }else{
+            throw new IllegalArgumentException("Поля нового пароля не совпадают!");
+        }
+    }
 }

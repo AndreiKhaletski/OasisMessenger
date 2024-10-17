@@ -31,4 +31,9 @@ public class BlackListTokenTokenService implements IBlackListTokenService {
 
         blackListTokenResource.saveAndFlush(blackListTokenEntity);
     }
+
+    @Override
+    public Boolean get(String token) {
+        return blackListTokenResource.existsByToken(token);
+    }
 }

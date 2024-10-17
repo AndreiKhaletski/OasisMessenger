@@ -6,8 +6,6 @@ spring:
     url: jdbc:postgresql://127.0.0.1:15432/dboasis
     username: system_app
     password: 855312
-#  mvc:
-#    static-path-pattern=/static/**
 
 email:
   recipient: ${MAIL_APP}
@@ -15,4 +13,4 @@ email:
 
 app:
   jwt:
-    secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+    secret: ${SECRET_KEY}

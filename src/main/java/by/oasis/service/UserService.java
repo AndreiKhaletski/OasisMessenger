@@ -1,6 +1,7 @@
 package by.oasis.service;
 
 import by.oasis.core.dto.BlackListTokenDto;
+import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.core.enums.EnumStatusRegistration;
 import by.oasis.dao.api.IUserResource;
@@ -85,5 +86,16 @@ public class UserService implements IUserService {
         System.out.println("Обновленная вкр.: " + registrationEntity.getDtUpdate());
 
         blackListTokenService.add(token);
+    }
+
+    @Override
+    @Transactional
+    public void setNewPassword(RegistrationEntity registrationEntity) {
+        userResource.save(registrationEntity);
+    }
+
+    @Override
+    public Boolean toketInBlackList(String token) {
+        return blackListTokenService.get(token);
     }
 }

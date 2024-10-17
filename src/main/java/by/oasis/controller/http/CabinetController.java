@@ -1,6 +1,7 @@
 package by.oasis.controller.http;
 
 import by.oasis.core.dto.AuthorizationDto;
+import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.service.api.ICabinetService;
 import by.oasis.service.converter.RegistrationConverter;
@@ -68,15 +69,9 @@ public class CabinetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registrationDto);
     }
 
-//    @GetMapping(value = "/validateToken")
-//    public ResponseEntity userValidation(HttpServletRequest request){
-//
-//        String token = request.getHeader("Authorization");
-//        boolean isValid = cabinetService.getValidToken(token);
-//        if (isValid) {
-//            return ResponseEntity.ok().build();
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
+    @PostMapping(value = "/change-password")
+    public ResponseEntity<?> changePasswordUser(@RequestBody ChangePasswordDto changePasswordDto){
+        cabinetService.changePassword(changePasswordDto);
+        return ResponseEntity.ok().body("Вы успешно изменили пароль!");
+    }
 }
