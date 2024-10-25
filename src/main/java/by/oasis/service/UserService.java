@@ -49,7 +49,6 @@ public class UserService implements IUserService {
             registrationEntity.setPassword(encoder.encode(registrationDto.getPassword()));
 
             if (registrationEntity.getStatus() == EnumStatusRegistration.WAITING_ACTIVATION) {
-
                 TextMessage textMessage = new TextMessage();
                 verificationService.create(
                     registrationDto.getEmail(),
