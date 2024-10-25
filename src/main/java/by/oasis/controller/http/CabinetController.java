@@ -3,6 +3,7 @@ package by.oasis.controller.http;
 import by.oasis.core.dto.AuthorizationDto;
 import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
+import by.oasis.service.UserHolder;
 import by.oasis.service.api.ICabinetService;
 import by.oasis.service.converter.RegistrationConverter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,9 +70,31 @@ public class CabinetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registrationDto);
     }
 
+    @PostMapping(value = "/pre-change-password")
+    public ResponseEntity<?> preChangePasswordUser(){
+        cabinetService.preChangePassword();
+        return ResponseEntity.ok().body("Код для изменения аккаунта выслан на вашу почту");
+    }
+
     @PostMapping(value = "/change-password")
     public ResponseEntity<?> changePasswordUser(@RequestBody ChangePasswordDto changePasswordDto){
         cabinetService.changePassword(changePasswordDto);
         return ResponseEntity.ok().body("Вы успешно изменили пароль!");
+    }
+
+    @PostMapping(value = "/pre-delete-me-account")
+    public ResponseEntity<?> preDeleteMeAccount(){
+        cabinetService.preDeleteMeAccount();
+        return ResponseEntity.ok().body("Код для удаления аккаунта выслан на вашу почту");
+    }
+
+    @DeleteMapping(value = "/delete-me-account")
+    public ResponseEntity<?> deleteAccount(@RequestParam("codeDeleteAccount") String codeDeleteAccount){
+        try {
+            cabinetService.deleteMeAccount(codeDeleteAccount);
+            return ResponseEntity.ok().body("Аккаунт успешно удален");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при удалении аккаунта");
+        }
     }
 }

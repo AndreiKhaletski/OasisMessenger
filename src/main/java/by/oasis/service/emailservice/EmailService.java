@@ -20,7 +20,7 @@ public class EmailService implements IEmailService {
     }
 
     @Override
-    public void sendEmailMessage(VerificationEntity VerificationEntity) {
+    public void sendEmailMessage(VerificationEntity VerificationEntity, String title, String text) {
 
         // Создание сессии электронной почты unkingip@mail.ru
         Session session = Session.getInstance(emailProperties.getProps(), new Authenticator() {
@@ -40,8 +40,8 @@ public class EmailService implements IEmailService {
             );
             messageToUser.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(VerificationEntity.getEmail()));
-            messageToUser.setSubject("Подтверждение почтового адреса");
-            messageToUser.setText(VerificationEntity.getCode());
+            messageToUser.setSubject(title);
+            messageToUser.setText(text + VerificationEntity.getCode());
 
             // Отправка сообщения для пользователя из MessagesDTO
             Transport.send(messageToUser);

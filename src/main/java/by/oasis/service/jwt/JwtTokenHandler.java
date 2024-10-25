@@ -27,7 +27,7 @@ public class JwtTokenHandler {
         return Jwts.builder()
                 .setSubject(name)
                 .claim("role", role)
-                .setIssuer("ITAcademy")
+                .setIssuer("Oasis")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
                 .signWith(SignatureAlgorithm.HS256, property.getSecret())

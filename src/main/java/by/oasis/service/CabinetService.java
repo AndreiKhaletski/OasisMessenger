@@ -9,6 +9,7 @@ import by.oasis.dao.entity.RegistrationEntity;
 import by.oasis.service.api.ICabinetService;
 import by.oasis.service.api.IUserService;
 import by.oasis.service.api.IVerificationService;
+import by.oasis.service.emailservice.TextMessage;
 import by.oasis.service.jwt.JwtTokenHandler;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -92,13 +93,35 @@ public class CabinetService implements ICabinetService {
     }
 
     @Override
-    @Transactional
-    public void changePassword(ChangePasswordDto changePasswordDto) {
+    public void preChangePassword() {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
         Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
 
         if (blackToken){
             throw new IllegalArgumentException("Ваш токен аннулирован!");
+        }
+
+        TextMessage textMessage = new TextMessage();
+        verificationService.create(
+                registrationEntity.getEmail(),
+                textMessage.CHANGE_PASSWORD_TITLE,
+                textMessage.CHANGE_PASSWORD_TEXT);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordDto changePasswordDto) {
+        RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
+        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
+
+        String codeToDB = verificationService.get(registrationEntity.getEmail());
+
+        if (blackToken){
+            throw new IllegalArgumentException("Ваш токен аннулирован!");
+        }
+
+        if (!Objects.equals(changePasswordDto.getCodeToChangePassword(), codeToDB)){
+            throw new IllegalArgumentException("Неверный код подтверждения!");
         }
 
         if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), registrationEntity.getPassword())){
@@ -111,5 +134,40 @@ public class CabinetService implements ICabinetService {
         }else{
             throw new IllegalArgumentException("Поля нового пароля не совпадают!");
         }
+    }
+
+    @Override
+    public void preDeleteMeAccount() {
+        RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
+        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
+
+        if (blackToken){
+            throw new IllegalArgumentException("Ваш токен аннулирован!");
+        }
+
+        TextMessage textMessage = new TextMessage();
+        verificationService.create(
+                registrationEntity.getEmail(),
+                textMessage.DELETE_ME_ACCOUNT_TITLE,
+                textMessage.DELETE_ME_ACCOUNT_TEXT);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMeAccount(String codeDeleteAccount) {
+        RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
+        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
+
+        String codeToDB = verificationService.get(registrationEntity.getEmail());
+
+        if (blackToken){
+            throw new IllegalArgumentException("Ваш токен аннулирован!");
+        }
+
+        if(!Objects.equals(codeDeleteAccount, codeToDB)){
+            throw new IllegalArgumentException("Неверный код подтверждения!");
+        }
+
+        userService.deleteUserAfterVerification(UserHolder.getUser().getUsername());
     }
 }

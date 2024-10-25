@@ -1,17 +1,14 @@
 package by.oasis.service;
 
-import by.oasis.core.dto.BlackListTokenDto;
-import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.core.enums.EnumStatusRegistration;
 import by.oasis.dao.api.IUserResource;
-import by.oasis.dao.entity.BlackListTokenEntity;
 import by.oasis.dao.entity.RegistrationEntity;
 import by.oasis.service.api.IBlackListTokenService;
 import by.oasis.service.api.IUserService;
 import by.oasis.service.api.IVerificationService;
-import by.oasis.service.converter.BlackListTokenConverter;
 import by.oasis.service.converter.RegistrationConverter;
+import by.oasis.service.emailservice.TextMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +49,12 @@ public class UserService implements IUserService {
             registrationEntity.setPassword(encoder.encode(registrationDto.getPassword()));
 
             if (registrationEntity.getStatus() == EnumStatusRegistration.WAITING_ACTIVATION){
-                verificationService.create(registrationDto.getEmail());
+
+                TextMessage textMessage = new TextMessage();
+                verificationService.create(
+                        registrationDto.getEmail(),
+                        textMessage.WELCOME_TITLE,
+                        textMessage.WELCOME_TEXT);
             }
             userResource.save(registrationEntity);
         }else {
@@ -97,5 +99,11 @@ public class UserService implements IUserService {
     @Override
     public Boolean toketInBlackList(String token) {
         return blackListTokenService.get(token);
+    }
+
+    @Override
+    public void deleteUserAfterVerification(String email) {
+        RegistrationEntity registrationEntity = findByEmail(email);
+        userResource.deleteById(registrationEntity.getUuid());
     }
 }

@@ -15,4 +15,6 @@ public interface IUserService {
     void setNewPassword(RegistrationEntity registrationEntity);
 
     Boolean toketInBlackList(String token);
+
+    void deleteUserAfterVerification(String email);
 }
