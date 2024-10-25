@@ -55,6 +55,7 @@ public class UserService implements IUserService {
                     textMessage.WELCOME_TITLE,
                     textMessage.WELCOME_TEXT);
             }
+
             userResource.save(registrationEntity);
         } else {
             throw new IllegalArgumentException("Такой пользователь уже зарегистрирован!   ");
