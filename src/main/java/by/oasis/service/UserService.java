@@ -44,20 +44,20 @@ public class UserService implements IUserService {
     public void create(RegistrationDto registrationDto) {
         RegistrationEntity registrationEntity = converterReg.convertToRegEntity(registrationDto);
 
-        if (userResource.findByEmail(registrationEntity.getEmail()) == null){
+        if (userResource.findByEmail(registrationEntity.getEmail()) == null) {
             registrationEntity.setUuid(UUID.randomUUID());
             registrationEntity.setPassword(encoder.encode(registrationDto.getPassword()));
 
-            if (registrationEntity.getStatus() == EnumStatusRegistration.WAITING_ACTIVATION){
+            if (registrationEntity.getStatus() == EnumStatusRegistration.WAITING_ACTIVATION) {
 
                 TextMessage textMessage = new TextMessage();
                 verificationService.create(
-                        registrationDto.getEmail(),
-                        textMessage.WELCOME_TITLE,
-                        textMessage.WELCOME_TEXT);
+                    registrationDto.getEmail(),
+                    textMessage.WELCOME_TITLE,
+                    textMessage.WELCOME_TEXT);
             }
             userResource.save(registrationEntity);
-        }else {
+        } else {
             throw new IllegalArgumentException("Такой пользователь уже зарегистрирован!");
         }
     }
@@ -80,7 +80,7 @@ public class UserService implements IUserService {
         //Проблема с @Version, а точнее с версией обновления...
         // В RegistrationEntity @Version закомментирован
         RegistrationEntity registrationEntity = userResource
-                        .findByEmail(UserHolder.getUser().getUsername());
+            .findByEmail(UserHolder.getUser().getUsername());
         registrationEntity.setToken(null);
         registrationEntity.setDtUpdate(LocalDateTime.now(ZoneOffset.UTC));
         System.out.println("Текущая вер.: " + registrationEntity.getDtUpdate());
