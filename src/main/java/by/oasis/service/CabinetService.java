@@ -95,11 +95,6 @@ public class CabinetService implements ICabinetService {
     @Override
     public void preChangePassword() {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
-        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
-
-        if (blackToken){
-            throw new IllegalArgumentException("Ваш токен аннулирован!");
-        }
 
         TextMessage textMessage = new TextMessage();
         verificationService.create(
@@ -112,13 +107,8 @@ public class CabinetService implements ICabinetService {
     @Transactional
     public void changePassword(ChangePasswordDto changePasswordDto) {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
-        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
 
         String codeToDB = verificationService.get(registrationEntity.getEmail());
-
-        if (blackToken){
-            throw new IllegalArgumentException("Ваш токен аннулирован!");
-        }
 
         if (!Objects.equals(changePasswordDto.getCodeToChangePassword(), codeToDB)){
             throw new IllegalArgumentException("Неверный код подтверждения!");
@@ -139,11 +129,6 @@ public class CabinetService implements ICabinetService {
     @Override
     public void preDeleteMeAccount() {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
-        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
-
-        if (blackToken){
-            throw new IllegalArgumentException("Ваш токен аннулирован!");
-        }
 
         TextMessage textMessage = new TextMessage();
         verificationService.create(
@@ -156,13 +141,8 @@ public class CabinetService implements ICabinetService {
     @Transactional
     public void deleteMeAccount(String codeDeleteAccount) {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
-        Boolean blackToken = userService.toketInBlackList("Bearer " + registrationEntity.getToken());
 
         String codeToDB = verificationService.get(registrationEntity.getEmail());
-
-        if (blackToken){
-            throw new IllegalArgumentException("Ваш токен аннулирован!");
-        }
 
         if(!Objects.equals(codeDeleteAccount, codeToDB)){
             throw new IllegalArgumentException("Неверный код подтверждения!");

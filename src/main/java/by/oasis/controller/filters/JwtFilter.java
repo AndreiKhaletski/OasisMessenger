@@ -1,6 +1,7 @@
 package by.oasis.controller.filters;
 
 import by.oasis.dao.entity.RegistrationEntity;
+import by.oasis.service.api.IBlackListTokenService;
 import by.oasis.service.api.IUserService;
 import by.oasis.service.detailesservice.CustomUserDetails;
 import by.oasis.service.jwt.JwtTokenHandler;
@@ -25,10 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenHandler jwtHandler;
     private final IUserService userService;
+    private final IBlackListTokenService blackListTokenService;
 
-    public JwtFilter(JwtTokenHandler jwtHandler, IUserService userService) {
+    public JwtFilter(JwtTokenHandler jwtHandler,
+                     IUserService userService,
+                     IBlackListTokenService blackListTokenService) {
         this.jwtHandler = jwtHandler;
         this.userService = userService;
+        this.blackListTokenService = blackListTokenService;
     }
 
     @Override
@@ -43,11 +48,17 @@ public class JwtFilter extends OncePerRequestFilter {
              return;
         }
 
-        // Get jwt token and validate
+        //Получение jwt токена и валидация
         final String token = header.split(" ")[1].trim();
         if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
+        }
+
+        //Проверка токена на блокировку
+        if (blackListTokenService.get("Bearer " + token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Ваш токен аннулирован!");
         }
 
         RegistrationEntity registrationEntity = userService.findByEmail(jwtHandler.getUsername(token));
