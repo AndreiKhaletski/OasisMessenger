@@ -85,7 +85,7 @@ public class UserService implements IUserService {
         registrationEntity.setDtUpdate(LocalDateTime.now(ZoneOffset.UTC));
         System.out.println("Текущая вер.: " + registrationEntity.getDtUpdate());
         userResource.saveAndFlush(registrationEntity);
-        System.out.println("Обновленная вкр.: " + registrationEntity.getDtUpdate());
+        System.out.println("Обновленная вер.: " + registrationEntity.getDtUpdate());
 
         blackListTokenService.add(token);
     }
@@ -94,11 +94,6 @@ public class UserService implements IUserService {
     @Transactional
     public void setNewPassword(RegistrationEntity registrationEntity) {
         userResource.save(registrationEntity);
-    }
-
-    @Override
-    public Boolean toketInBlackList(String token) {
-        return blackListTokenService.get(token);
     }
 
     @Override

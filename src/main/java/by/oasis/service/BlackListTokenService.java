@@ -11,13 +11,13 @@ import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
-public class BlackListTokenTokenService implements IBlackListTokenService {
+public class BlackListTokenService implements IBlackListTokenService {
 
     private final BlackListTokenConverter converterBlackToken;
     private final IBlackListTokenResource blackListTokenResource;
 
-    public BlackListTokenTokenService(BlackListTokenConverter converterBlackToken,
-                                      IBlackListTokenResource blackListTokenResource) {
+    public BlackListTokenService(BlackListTokenConverter converterBlackToken,
+                                 IBlackListTokenResource blackListTokenResource) {
         this.converterBlackToken = converterBlackToken;
         this.blackListTokenResource = blackListTokenResource;
     }
@@ -33,7 +33,12 @@ public class BlackListTokenTokenService implements IBlackListTokenService {
     }
 
     @Override
-    public Boolean get(String token) {
+    public boolean get(String token) {
         return blackListTokenResource.existsByToken(token);
+    }
+
+    @Override
+    public void validateTokenNonBlock(String token) {
+
     }
 }
