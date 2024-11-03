@@ -111,7 +111,7 @@ public class CabinetService implements ICabinetService {
         String codeToDB = verificationService.get(registrationEntity.getEmail());
 
         if (!Objects.equals(changePasswordDto.getCodeToChangePassword(), codeToDB)){
-            throw new IllegalArgumentException("Неверный код подтверждения!");
+            throw new IllegalArgumentException("Неверный код подтверждения! ");
         }
 
         if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), registrationEntity.getPassword())){
