@@ -15,4 +15,7 @@ public class TextMessage {
     public String DELETE_ME_ACCOUNT_TITLE = "Подтверждение удаления вашего аккаунта на сервисе Oasis";
     public String DELETE_ME_ACCOUNT_TEXT = "Код для подтверждения удаления аккаунта: ";
 
+    //Вспомнить пароль от аккаунта
+    public String RESET_ME_PASSWORD_TITLE = "Сброс пароля вашего аккаунта на сервисе Oasis";
+    public String RESET_ME_PASSWORD_TEXT = "Код для подтверждения сброса пароля на вашем аккаунте: ";
 }

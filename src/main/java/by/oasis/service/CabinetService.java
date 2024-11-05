@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -111,7 +113,7 @@ public class CabinetService implements ICabinetService {
         String codeToDB = verificationService.get(registrationEntity.getEmail());
 
         if (!Objects.equals(changePasswordDto.getCodeToChangePassword(), codeToDB)){
-            throw new IllegalArgumentException("Неверный код подтверждения! ");
+            throw new IllegalArgumentException("Неверный код подтверждения!");
         }
 
         if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), registrationEntity.getPassword())){
@@ -142,12 +144,51 @@ public class CabinetService implements ICabinetService {
     public void deleteMeAccount(String codeDeleteAccount) {
         RegistrationEntity registrationEntity = userService.findByEmail(UserHolder.getUser().getUsername());
 
-        String codeToDB = verificationService.get(registrationEntity.getEmail());
+        String codeToDb = verificationService.get(registrationEntity.getEmail());
 
-        if(!Objects.equals(codeDeleteAccount, codeToDB)){
+        if (!Objects.equals(codeDeleteAccount, codeToDb)) {
             throw new IllegalArgumentException("Неверный код подтверждения!");
         }
 
         userService.deleteUserAfterVerification(UserHolder.getUser().getUsername());
+    }
+
+    @Override
+    public void prePasswordReset(String email) {
+        Optional<RegistrationEntity> registrationEntity = Optional.ofNullable(userService.findByEmail(email));
+
+        if (registrationEntity.isPresent()) {
+            TextMessage textMessage = new TextMessage();
+            verificationService.create(
+                email,
+                textMessage.RESET_ME_PASSWORD_TITLE,
+                textMessage.RESET_ME_PASSWORD_TEXT);
+
+            //Нужно ссылку с uuid отправлять ?
+
+        } else {
+            throw new IllegalArgumentException("Такого пользователя нет!");
+        }
+    }
+
+    @Override
+    public boolean resetPassword(UUID uuid, String codeResetPassword, String newPassword) {
+        Optional<RegistrationEntity> registrationEntity = userService.findByUuid(uuid);
+
+        if (registrationEntity.isEmpty()) {
+            throw new IllegalArgumentException("Неверный UUID для сброса пароля!");
+        }
+
+        String codeToDb = verificationService.get(registrationEntity.get().email);
+
+        if (!Objects.equals(codeResetPassword, codeToDb)) {
+            throw new IllegalArgumentException("Неверный код подтверждения!");
+        }
+
+        registrationEntity.get().setPassword(passwordEncoder.encode(newPassword));
+        registrationEntity.get().setDtUpdate(LocalDateTime.now(ZoneOffset.UTC));
+        userService.save(registrationEntity.get());
+
+        return true;
     }
 }

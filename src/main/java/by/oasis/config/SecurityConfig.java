@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .requestMatchers("/cabinet/me").authenticated()
                 .requestMatchers("/cabinet/delete-me-account").authenticated()
                 .requestMatchers("/cabinet/pre-delete-me-account").authenticated()
+            .requestMatchers("/pre-password-reset").permitAll()
                 .anyRequest().authenticated()
         );
 
