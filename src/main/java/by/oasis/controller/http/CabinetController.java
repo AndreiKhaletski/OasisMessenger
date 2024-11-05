@@ -3,7 +3,7 @@ package by.oasis.controller.http;
 import by.oasis.core.dto.AuthorizationDto;
 import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
-import by.oasis.service.UserHolder;
+import by.oasis.core.dto.ResetPasswordDto;
 import by.oasis.service.api.ICabinetService;
 import by.oasis.service.converter.RegistrationConverter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -42,14 +41,6 @@ public class CabinetController {
         cabinetService.verification(code, email);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-//    @PostMapping(value = "/login")
-//    public ResponseEntity<?> authorization(@RequestBody AuthorizationDto authorizationDto) {
-//        String token = "Bearer " + cabinetService.authorization(authorizationDto);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Authorization", token);
-//        return ResponseEntity.ok().headers(headers).build();
-//    }
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> authorization(@RequestBody AuthorizationDto authorizationDto){
@@ -95,6 +86,25 @@ public class CabinetController {
             return ResponseEntity.ok().body("Аккаунт успешно удален");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при удалении аккаунта");
+        }
+    }
+
+    @PostMapping(value = "/pre-password-reset")
+    public ResponseEntity<?> prePasswordReset(@RequestParam("email") String email) {
+        cabinetService.prePasswordReset(email);
+        return ResponseEntity.ok().body("Код для сброса пароля выслан на вашу почту");
+    }
+
+    @PutMapping("/password-reset/{uuid}")
+    public ResponseEntity<?> passwordReset(@PathVariable UUID uuid, @RequestBody ResetPasswordDto resetPasswordDto) {
+        boolean isResetSuccessful = cabinetService.resetPassword(
+            uuid,
+            resetPasswordDto.getCodeResetPassword(),
+            resetPasswordDto.getNewPassword());
+        if (isResetSuccessful) {
+            return ResponseEntity.ok().body("Ваш пароль был успешно сброшен");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка сброса пароля");
         }
     }
 }

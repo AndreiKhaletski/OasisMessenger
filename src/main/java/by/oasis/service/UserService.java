@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -97,8 +98,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void deleteUserAfterVerification(String email) {
         RegistrationEntity registrationEntity = findByEmail(email);
         userResource.deleteById(registrationEntity.getUuid());
+    }
+
+    @Override
+    public Optional<RegistrationEntity> findByUuid(UUID uuid) {
+        return userResource.findById(uuid);
     }
 }

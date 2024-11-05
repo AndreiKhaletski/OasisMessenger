@@ -5,6 +5,8 @@ import by.oasis.core.dto.ChangePasswordDto;
 import by.oasis.core.dto.RegistrationDto;
 import by.oasis.dao.entity.RegistrationEntity;
 
+import java.util.UUID;
+
 public interface ICabinetService {
     void create(RegistrationDto registrationDto);
 
@@ -23,4 +25,8 @@ public interface ICabinetService {
     void preDeleteMeAccount();
 
     void deleteMeAccount(String codeDeleteAccount);
+
+    void prePasswordReset(String email);
+
+    boolean resetPassword(UUID uuid, String code, String newPassword);
 }
