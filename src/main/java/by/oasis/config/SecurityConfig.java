@@ -40,13 +40,14 @@ public class SecurityConfig {
                 .requestMatchers("/cabinet/registration").permitAll()
                 .requestMatchers("/cabinet/verification").permitAll()
                 .requestMatchers("/cabinet/login").permitAll()
+            .requestMatchers("/cabinet/pre-password-reset").permitAll()
+            .requestMatchers("/cabinet/password-reset/{uuid}").permitAll()
                 .requestMatchers("/cabinet/logout").authenticated()
                 .requestMatchers("/cabinet/change-password").authenticated()
                 .requestMatchers("/cabinet/pre-change-password").authenticated()
                 .requestMatchers("/cabinet/me").authenticated()
                 .requestMatchers("/cabinet/delete-me-account").authenticated()
                 .requestMatchers("/cabinet/pre-delete-me-account").authenticated()
-            .requestMatchers("/pre-password-reset").permitAll()
                 .anyRequest().authenticated()
         );
 
