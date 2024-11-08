@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .requestMatchers("/cabinet/registration").permitAll()
                 .requestMatchers("/cabinet/verification").permitAll()
                 .requestMatchers("/cabinet/login").permitAll()
+            .requestMatchers("/cabinet/pre-password-reset").permitAll()
+            .requestMatchers("/cabinet/password-reset/{uuid}").permitAll()
                 .requestMatchers("/cabinet/logout").authenticated()
                 .requestMatchers("/cabinet/change-password").authenticated()
                 .requestMatchers("/cabinet/pre-change-password").authenticated()

@@ -4,7 +4,6 @@ import by.oasis.core.enums.EnumStatusSendEmail;
 import by.oasis.dao.api.IUserVerificationResource;
 import by.oasis.dao.entity.VerificationEntity;
 import by.oasis.service.api.IVerificationService;
-import by.oasis.service.emailservice.TextMessage;
 import by.oasis.service.emailservice.api.IEmailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +55,10 @@ public class VerificationService implements IVerificationService {
         return verificationResource.findByEmail(email).getCode();
     }
 
-
+    @Override
+    @Transactional
+    public void detele(String email) {
+        VerificationEntity verificationEntity = verificationResource.findByEmail(email);
+        verificationResource.delete(verificationEntity);
+    }
 }

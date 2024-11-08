@@ -93,12 +93,6 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public void setNewPassword(RegistrationEntity registrationEntity) {
-        userResource.save(registrationEntity);
-    }
-
-    @Override
-    @Transactional
     public void deleteUserAfterVerification(String email) {
         RegistrationEntity registrationEntity = findByEmail(email);
         userResource.deleteById(registrationEntity.getUuid());

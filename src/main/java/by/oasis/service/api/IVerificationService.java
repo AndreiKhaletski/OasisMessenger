@@ -5,4 +5,6 @@ public interface IVerificationService {
 
     String get(String email);
 
+    void detele(String email);
+
 }

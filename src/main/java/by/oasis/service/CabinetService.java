@@ -122,7 +122,7 @@ public class CabinetService implements ICabinetService {
 
         if (Objects.equals(changePasswordDto.getNewPassword(), changePasswordDto.getConfirmNewPassword())){
             registrationEntity.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
-            userService.setNewPassword(registrationEntity);
+            userService.save(registrationEntity);
         }else{
             throw new IllegalArgumentException("Поля нового пароля не совпадают!");
         }
@@ -162,7 +162,7 @@ public class CabinetService implements ICabinetService {
             verificationService.create(
                 email,
                 textMessage.RESET_ME_PASSWORD_TITLE,
-                textMessage.RESET_ME_PASSWORD_TEXT);
+                "Cсылка на смену пароля: " + "http://localhost:3000/password-reset/" + registrationEntity.get().getUuid() + " " + textMessage.RESET_ME_PASSWORD_TEXT);
 
             //Нужно ссылку с uuid отправлять ?
 
@@ -172,6 +172,7 @@ public class CabinetService implements ICabinetService {
     }
 
     @Override
+    @Transactional
     public boolean resetPassword(UUID uuid, String codeResetPassword, String newPassword) {
         Optional<RegistrationEntity> registrationEntity = userService.findByUuid(uuid);
 
@@ -189,6 +190,8 @@ public class CabinetService implements ICabinetService {
         registrationEntity.get().setDtUpdate(LocalDateTime.now(ZoneOffset.UTC));
         userService.save(registrationEntity.get());
 
+        //Удаление кода для сброса пароля
+//        verificationService.detele(registrationEntity.get().getEmail());
         return true;
     }
 }
