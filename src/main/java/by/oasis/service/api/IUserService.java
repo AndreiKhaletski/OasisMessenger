@@ -15,8 +15,6 @@ public interface IUserService {
 
     void addTokenToLock(String token);
 
-    void setNewPassword(RegistrationEntity registrationEntity);
-
     void deleteUserAfterVerification(String email);
 
     Optional<RegistrationEntity> findByUuid(UUID uuid);
